@@ -1,0 +1,14 @@
+The above code presents an simple calculator that allows users to perform arithmetic calculations using both mouse clicks and keyboard input. The calculator's 
+interface comprises a text input field and a grid of buttons, representing numbers, basic arithmetic operators (+, -, *, /), special functions (e.g., square, square root, 
+cube root, reciprocal), a backspace button, and an equal sign (=) for calculation.
+
+The JavaScript code handles user interactions and input validation. When the user clicks on a button, the corresponding operator or number is 
+added to the calculation expression displayed in the input field. Input validation ensures that only valid characters (numbers and operators) are added to the 
+calculation, and any other characters are ignored.
+The calculator supports keyboard input, allowing users to type numbers, operators, Enter key (for calculation), and Backspace key (for backspace functionality). 
+Invalid characters or keys are blocked from being inputted, maintaining a consistent and reliable user experience.
+The calculator also includes special functions like square, square root, cube root, and reciprocal, allowing users to perform more complex calculations with ease. 
+When the user clicks the equal sign (=) or presses the Enter key, the calculator evaluates the entered expression and displays the result in the input field.
+
+Overall, this calculator provides users with a straightforward and accessible way to perform basic arithmetic calculations while 
+ensuring a smooth and responsive user experience.
