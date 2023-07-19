@@ -6,6 +6,7 @@ cube root, reciprocal), a backspace button, and an equal sign (=) for calculatio
 The JavaScript code handles user interactions and input validation. When the user clicks on a button, the corresponding operator or number is 
 added to the calculation expression displayed in the input field. Input validation ensures that only valid characters (numbers and operators) are added to the 
 calculation, and any other characters are ignored.
+
 The calculator supports keyboard input, allowing users to type numbers, operators, Enter key (for calculation), and Backspace key (for backspace functionality). 
 Invalid characters or keys are blocked from being inputted, maintaining a consistent and reliable user experience.
 The calculator also includes special functions like square, square root, cube root, and reciprocal, allowing users to perform more complex calculations with ease. 
