@@ -1,3 +1,4 @@
+A small description on the code:
 The above code presents an simple calculator that allows users to perform arithmetic calculations using both mouse clicks and keyboard input. The calculator's 
 interface comprises a text input field and a grid of buttons, representing numbers, basic arithmetic operators (+, -, *, /), special functions (e.g., square, square root, 
 cube root, reciprocal), a backspace button, and an equal sign (=) for calculation.
