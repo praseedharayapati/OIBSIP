@@ -1,1 +1,364 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+    <title>Interactive To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #9db0a5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #e6af49;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        select,
+        input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s ease;
+            margin-bottom: 10px;
+        }
+
+
+        .task-card:hover {
+            background-color: #f1f1f1;
+        }
+
+        .task-card.active {
+            background-color: #f3f3f3;
+        }
+
+        .todo-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+            justify-content: flex-end;
+            margin-top: 5px;
+        }
+
+        .edit-input {
+            display: none;
+        }
+
+        #completedTasks {
+            margin-top: 20px;
+            border-top: 2px solid #ccc;
+        }
+
+        .task-1 {
+            background-color: #f2f2f2;
+        }
+
+        .task-2 {
+            font-style: italic;
+        }
+
+        .task-3 {
+            background-color: #ffeecc;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>To-Do List</h1>
+
+    <div id="addTaskForm">
+        <input type="text" id="taskText" placeholder="Enter task">
+        <label for="deadline">Deadline:</label>
+        <input type="date" id="deadline" min="2023-01-01" max="2030-12-31">
+        <button onclick="addTask()">Add Task</button>
+    </div>
+
+    <div id="todoList"></div>
+
+    <div id="completedTasks">
+        <h2>Completed Tasks</h2>
+        <div id="completedList"></div>
+    </div>
+
+    <script>
+
+        const todoItems = JSON.parse(localStorage.getItem("todoItems")) || [];
+        let completedItems = JSON.parse(localStorage.getItem("completedItems")) || [];
+
+     
+        function renderTodoList() {
+            const todoListDiv = document.getElementById("todoList");
+            const completedListDiv = document.getElementById("completedList");
+            todoListDiv.innerHTML = "";
+            completedListDiv.innerHTML = "";
+
+           
+            todoItems.forEach((item, index) => {
+                const todoItemDiv = createTodoItemDiv(item, index);
+                todoListDiv.appendChild(todoItemDiv);
+            });
+
+           
+            completedItems.forEach((item, index) => {
+                const completedItemDiv = createCompletedItemDiv(item, index);
+                completedListDiv.appendChild(completedItemDiv);
+            });
+        }
+
+        function createTodoItemDiv(item, index, completed = false) {
+            const todoItemDiv = document.createElement("div");
+            todoItemDiv.className = `todo-item task-${index + 1}`;
+
+            const itemText = document.createElement("span");
+            itemText.textContent = item.text;
+
+            const itemDeadline = document.createElement("span");
+            itemDeadline.textContent = "Deadline: " + item.deadline;
+            itemDeadline.style.textAlign = "right";
+            itemDeadline.style.marginTop = "5px";
+
+            const editInput = document.createElement("input");
+            editInput.className = "edit-input";
+            editInput.type = "text";
+            editInput.addEventListener("keyup", (event) => {
+                if (event.key === "Enter") saveEditedTask(index);
+            });
+
+            const actionsDiv = document.createElement("div");
+            actionsDiv.className = "actions";
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.onclick = () => {
+                if (completed) {
+                    if (confirm("Are you sure you want to delete this completed task?")) {
+                        deleteCompletedTask(index);
+                    }
+                } else {
+                    if (confirm("Are you sure you want to delete this task?")) {
+                        deleteTodoItem(index);
+                    }
+                }
+            };
+
+            if (!completed) {
+                const markCompletedButton = document.createElement("button");
+                markCompletedButton.textContent = "Mark as Completed";
+                markCompletedButton.onclick = () => markAsCompleted(index);
+                actionsDiv.appendChild(markCompletedButton);
+
+                const editButton = document.createElement("button");
+                editButton.textContent = "Edit";
+                editButton.onclick = () => toggleEdit(index);
+                actionsDiv.appendChild(editButton);
+            } else {
+                const uncompletedButton = document.createElement("button");
+                uncompletedButton.textContent = "Uncompleted";
+                uncompletedButton.onclick = () => uncompletedTask(index);
+                actionsDiv.appendChild(uncompletedButton);
+            }
+
+            actionsDiv.appendChild(deleteButton);
+            todoItemDiv.appendChild(itemText);
+
+            if (!completed) {
+                todoItemDiv.appendChild(actionsDiv);
+                todoItemDiv.appendChild(editInput);
+            }
+
+            todoItemDiv.appendChild(itemDeadline);
+
+            return todoItemDiv;
+        }
+
+    
+        function createCompletedItemDiv(item, index) {
+            const completedItemDiv = document.createElement("div");
+            completedItemDiv.className = `todo-item task-${index + 1}`;
+
+            const itemText = document.createElement("span");
+            itemText.textContent = item.text;
+
+            const itemDeadline = document.createElement("span");
+            itemDeadline.textContent = "Deadline: " + item.deadline;
+            itemDeadline.style.textAlign = "right";
+            itemDeadline.style.marginTop = "5px";
+
+            const actionsDiv = document.createElement("div");
+            actionsDiv.className = "actions";
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.onclick = () => deleteCompletedTask(index);
+            actionsDiv.appendChild(deleteButton);
+
+            completedItemDiv.appendChild(itemText);
+            completedItemDiv.appendChild(actionsDiv);
+            completedItemDiv.appendChild(itemDeadline);
+
+            return completedItemDiv;
+        }
+
+
+        function toggleEdit(index) {
+            const editInput = document.getElementsByClassName("edit-input")[index];
+            const itemText = document.getElementsByTagName("span")[index];
+
+            editInput.style.display = "block";
+            editInput.value = itemText.textContent;
+            itemText.style.display = "none";
+            editInput.focus();
+        }
+
+
+        function saveEditedTask(index) {
+            const editInput = document.getElementsByClassName("edit-input")[index];
+            const itemText = document.getElementsByTagName("span")[index];
+
+            todoItems[index].text = editInput.value.trim();
+            saveToLocalStorage();
+
+            editInput.style.display = "none";
+            itemText.textContent = editInput.value.trim();
+            itemText.style.display = "block";
+        }
+
+      
+        function deleteTodoItem(index) {
+            todoItems.splice(index, 1);
+            saveToLocalStorage();
+            renderTodoList();
+        }
+
+
+        function deleteCompletedTask(index) {
+            if (confirm("Are you sure you want to delete this completed task?")) {
+                completedItems.splice(index, 1);
+                saveCompletedToLocalStorage();
+                renderTodoList();
+            }
+        }
+
+       
+        function removeCompletedItem(index) {
+            completedItems.splice(index, 1);
+            saveCompletedToLocalStorage();
+            renderTodoList();
+        }
+
+        
+        function markAsCompleted(index) {
+            completedItems.push(todoItems[index]);
+            todoItems.splice(index, 1);
+
+            saveToLocalStorage();
+            saveCompletedToLocalStorage();
+            renderTodoList();
+        }
+
+        function uncompletedTask(index) {
+            todoItems.push(completedItems[index]);
+            completedItems.splice(index, 1);
+            saveToLocalStorage();
+            renderTodoList();
+        }
+
+        
+        function addTask() {
+            const taskText = document.getElementById("taskText").value;
+            const deadline = document.getElementById("deadline").value;
+
+            const currentDate = new Date();
+            const selectedDate = new Date(deadline);
+
+            if (taskText.trim() !== "" && deadline !== "" && selectedDate >= currentDate) {
+                const newTask = {
+                    text: taskText.trim(),
+                    created: new Date(),
+                    deadline: deadline,
+                    completed: false
+                };
+
+                todoItems.push(newTask);
+                saveToLocalStorage();
+                renderTodoList();
+
+             
+                document.getElementById("taskText").value = "";
+                document.getElementById("deadline").value = "";
+            } else {
+                alert("Please enter a valid task and a future deadline.");
+            }
+        }
+
+
+        function saveToLocalStorage() {
+            localStorage.setItem("todoItems", JSON.stringify(todoItems));
+        }
+
+   
+        function saveCompletedToLocalStorage() {
+            localStorage.setItem("completedItems", JSON.stringify(completedItems));
+        }
+
+        renderTodoList();
+    </script>
+
+</body>
+
+</html>
