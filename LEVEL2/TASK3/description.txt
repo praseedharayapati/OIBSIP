@@ -1,0 +1,24 @@
+
+
+Description of the Code:
+1. HTML Structure:
+   - The code defines a basic HTML structure with a title, header, and three main sections: "Add Task Form," "To-Do List," and "Completed Tasks."
+
+2. CSS Styling:
+   - The CSS styling is responsible for the overall appearance of the application. It sets up the layout, colors, fonts, and styles for various elements, providing a visually appealing and user-friendly interface.
+
+3. JavaScript Functionality:
+   - The JavaScript code manages the dynamic behavior of the To-Do List. It performs the following key functionalities:
+     a. Rendering the To-Do List: The `renderTodoList()` function displays both active and completed tasks on the web page by creating appropriate HTML elements for each task.
+     b. Adding a Task: The `addTask()` function allows users to add a new task by entering a task description and a future deadline. It performs input validation to ensure valid input before adding the task to the active task list.
+     c. Editing a Task: The `toggleEdit()` function enables the edit mode for a task, allowing users to modify the task's description.
+     d. Saving Edited Task: The `saveEditedTask()` function saves the edited task and updates it in the active task list.
+     e. Deleting a Task: The `deleteTodoItem()` function allows users to delete an active task, and the `deleteCompletedTask()` function allows users to delete a completed task from the completed task list.
+     f. Marking a Task as Completed: The `markAsCompleted()` function marks an active task as completed and moves it to the completed task list.
+     g. Marking a Completed Task as Uncompleted: The `uncompletedTask()` function moves a completed task back to the active task list.
+     h. Saving Data to Local Storage: The application uses `localStorage` to store the tasks locally, allowing the data to persist across page refreshes.
+  
+4. Task Styling:
+   - The code defines different styles for tasks based on their state (active, completed) and assigns specific classes to them accordingly. These styles differentiate between tasks and improve the user experience.
+
+Overall, the code provides a functional and interactive To-Do List application that users can use to manage their tasks effectively. It allows users to add, edit, complete, and delete tasks, making it a handy tool for organizing daily activities and deadlines.
